@@ -10,11 +10,16 @@ class Contacto extends React.Component {
         this.state = {};
     }
 
+    submit = (e)  => {
+        //Previene que se vuelva a recargar la pagina, comportamiento default del submit
+        e.preventDefault();
+    }
+
     render() {
         return (
-            <div class="bg-white p-4 shadow rounded">
-                <Form>
-                    <span class="display-6 formTitle">Escríbanos para mayor información</span>
+            <div className="bg-white p-4 shadow rounded">
+                <Form onSubmit={this.submit}>
+                    <span className="display-6 formTitle">Escríbanos para mayor información</span>
                     <hr />
                     <h5>(*) Campos obligatorios</h5><br />
                     <Form.Group className="mb-3" controlId="nombres">

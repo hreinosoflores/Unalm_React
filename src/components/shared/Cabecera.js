@@ -22,14 +22,14 @@ class Cabecera extends React.Component {
                             Universidad Nacional Agraria La Molina</Navbar.Brand>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         <Navbar.Collapse id="basic-navbar-nav">
-                            <ul class="nav nav-pills ms-auto">
-                                <li class="nav-item">
+                            <ul className="nav nav-pills ms-auto">
+                                <li className="nav-item">
                                     <NavLink className="nav-link" to="/" exact activeClassName="active">Nuestros Cursos</NavLink>
                                 </li>
-                                <li class="nav-item">
+                                <li className="nav-item">
                                     <NavLink className="nav-link" to="/about" exact activeClassName="active">¿Quiénes somos?</NavLink>
                                 </li>
-                                <li class="nav-item">
+                                <li className="nav-item">
                                     <NavLink className="nav-link" to="/contactenos" exact activeClassName="active">Contacto</NavLink>
                                 </li>
                             </ul>

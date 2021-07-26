@@ -3,9 +3,11 @@ import React from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import Cabecera from './shared/Cabecera'
 import PiePagina from './shared/PiePagina'
-import Cursos from './pages/Cursos'
+import CursoLista from './pages/CursoLista'
 import About from './pages/About'
 import Contacto from './pages/Contacto'
+import CursoDetalle from './pages/CursoDetalle'
+import CursoSave from './pages/CursoSave'
 
 
 class App extends React.Component {
@@ -22,7 +24,9 @@ class App extends React.Component {
         <div id="app" className="d-flex flex-column">
           <Cabecera />
           <main className="container-fluid col-12 col-lg-8 mx-auto">
-            <Route path="/" exact={true} component={Cursos} />
+            <Route path="/" exact={true} component={CursoLista} />
+            <Route path="/curso/detalle" exact={true} component={CursoDetalle} />
+            <Route path="/curso/save" exact={true} component={CursoSave} />
             <Route path="/about" exact={true} component={About} />
             <Route path="/contactenos" exact={true} component={Contacto} />
           </main>
