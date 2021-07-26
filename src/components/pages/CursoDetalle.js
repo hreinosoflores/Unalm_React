@@ -1,47 +1,66 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import Curso from '../../model/Curso'
+import React from 'react';
+import { Link } from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
+import FormatFecha from '../../util/FormatFecha';
 
 class CursoDetalle extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            curso: new Curso()
+            curso: {}
         };
     }
 
-    getCurso = () => {
-        fetch('http://localhost:40009/api/Cursos/1')
+    componentDidMount() {
+        const { match: { params } } = this.props;
+        this.getCurso(params.id);
+    }
+
+    getCurso = (id) => {
+        fetch(window.$apiURL + window.$urlCursos + id)
             .then(response => response.json())
             .then(data => this.setState({ curso: data }));
-
     }
 
-    componentDidMount() {
-        this.getCurso();
+    eliminar = () => {
+        fetch(window.$apiURL + window.$urlCursos  + this.state.curso.id,
+            {
+                method: 'DELETE',
+            }
+        )
+            .then(
+                response => {
+                    if (response.ok) {
+                        return response.text()
+                    } else {
+                        throw new Error("Error en la llamada Ajax")
+                    }
+                }
+            );
     }
+
 
     render() {
         return (
-
             <div className="bg-white p-4 shadow rounded">
 
-                <span className="display-6 cursoTitle">Detalles del Curso</span>
+                <span className="display-6 rojo">Detalles del Curso</span>
 
                 <hr />
 
                 <div className="btn-group d-flex justify-content-between align-items-center">
-                    <Link className="btn btn-primary" to="/">Editar Información</Link>
+                    <Link className="btn btn-primary" to={'/curso/save/' + this.state.curso.id}>Editar Información</Link>
+                    <Button variant="danger" onClick={this.eliminar}>Eliminar Curso</Button>
                 </div>
 
                 <br />
 
                 <strong className="text-secondary">Creado a las:</strong>
-                <p className="text-secondary">{this.state.curso.createdAt}</p>
+                <p className="text-secondary">{FormatFecha(this.state.curso.createdAt)}</p>
 
                 <strong className="text-secondary">Última modificación a las: </strong>
-                <p className="text-secondary">{this.state.curso.updatedAt}</p>
+                <p className="text-secondary">{FormatFecha(this.state.curso.updatedAt)}</p>
 
                 <strong className="text-secondary">Código</strong>
                 <p className="text-secondary">{this.state.curso.codigo}</p>

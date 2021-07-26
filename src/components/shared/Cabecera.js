@@ -1,9 +1,9 @@
-import React from 'react'
-import { NavLink } from 'react-router-dom'
-import Navbar from 'react-bootstrap/Navbar'
-import Container from 'react-bootstrap/Container'
+import '../../scss/Cabecera.scss';
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import Navbar from 'react-bootstrap/Navbar';
+import Container from 'react-bootstrap/Container';
 
-import '../../scss/Cabecera.scss'
 
 class Cabecera extends React.Component {
 
@@ -17,7 +17,7 @@ class Cabecera extends React.Component {
             <header>
                 <Navbar bg="white" expand="lg" fixed="top">
                     <Container>
-                        <Navbar.Brand className="text-secondary">
+                        <Navbar.Brand className="text-secondary text-break" id="titulo">
                             <img src="img/unalm-logo.png" alt="logo" />{' '}
                             Universidad Nacional Agraria La Molina</Navbar.Brand>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
