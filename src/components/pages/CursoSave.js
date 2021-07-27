@@ -105,7 +105,10 @@ class CursoDetalle extends React.Component {
                 }
             )
             .then(
-                data => console.log(data)
+                data => {
+                    console.log(data);
+                    this.props.history.push("/");
+                }
             );
     }
 

@@ -1,6 +1,6 @@
 import '../scss/App.scss';
 import React from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 import Cabecera from './shared/Cabecera';
 import PiePagina from './shared/PiePagina';
 import CursoLista from './pages/CursoLista';
@@ -19,7 +19,7 @@ class App extends React.Component {
 
     render() {
         return (
-            <Router>
+            <BrowserRouter>
                 <div className="d-flex flex-column">
                     <Cabecera />
                     <main className="container-fluid col-lg-8 mx-auto">
@@ -28,12 +28,11 @@ class App extends React.Component {
                         <Route path="/curso/save/:id" exact={true} component={CursoSave} />
                         <Route path="/about" exact={true} component={About} />
                         <Route path="/contactenos" exact={true} component={Contacto} />
+                        <Route render={() => <Redirect to={{ pathname: "/" }} />} />
                     </main>
                     <PiePagina />
                 </div>
-
-            </Router>
-
+            </BrowserRouter>
         );
     }
 
