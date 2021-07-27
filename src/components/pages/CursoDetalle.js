@@ -20,7 +20,10 @@ class CursoDetalle extends React.Component {
     getCurso = (id) => {
         fetch(window.$apiURL + window.$urlCursos + id)
             .then(response => response.json())
-            .then(data => this.setState({ curso: data }));
+            .then(data => {
+                this.setState({ curso: data });
+                document.title = window.$title + this.state.curso.nombre;
+            });
     }
 
     eliminar = () => {
@@ -90,47 +93,3 @@ class CursoDetalle extends React.Component {
 }
 
 export default CursoDetalle;
-
-/* <div className="bg-white p-4 shadow rounded">
-
-                 <span className="display-6cursoitle">Detalles delCurso/span>
-
-                 <hr/>
-
-                 <div className="btn-group d-flex justify-content-between align-items-center">
-                 <a className="btn btn-primary" [routerLink]="['curso/save']" [queryParams]="{id:curso.id}">Editar Información</a>
-                 <a className="btn btn-danger" (click)="onDelete()">
-                     EliminarCurso/a>
-                 </div>
-
-                 <br>
-
-                 <strong className="text-secondary">Creado a las:</strong>
-                 <p className="text-secondary">{curso.createdAt | date:formatoFecha}}</p>
-
-                 <strong className="text-secondary">Última modificación a las: </strong>
-                 <p className="text-secondary">{curso.updatedAt | date:formatoFecha}}</p>
-
-                 <strong className="text-secondary">Código</strong>
-                 <p className="text-secondary">{curso.codigo}}</p>
-
-                 <strong className="text-secondary">Nombre</strong>
-                 <p className="text-secondary">{curso.nombre}}</p>
-
-                 <strong className="text-secondary">Créditos</strong>
-                 <p className="text-secondary">{curso.creditos}}</p>
-
-                 <strong className="text-secondary">Horas de teoría</strong>
-                 <p className="text-secondary">{curso.horasTeoria}}</p>
-
-                 <strong className="text-secondary">Horas de práctica</strong>
-                 <p className="text-secondary">{curso.horasPractica}}</p>
-
-                 <strong className="text-secondary">Sumilla</strong>
-                 <p className="text-secondary">{curso.sumilla}}</p>
-
-                 <div className="d-grid gap-2">
-                 <a className="btn btn-outline-primary" routerLink="/">Regresar</a>
-                 </div>
-
-             </div> */

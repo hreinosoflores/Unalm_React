@@ -10,22 +10,24 @@ class CursoDetalle extends React.Component {
         super(props);
         this.state = {
             curso: {},
-            formTitle : 'Nuevo Curso',
-            formButton : 'Registrar'
+            formTitle: 'Nuevo Curso',
+            formButton: 'Registrar'
         };
     }
 
     componentDidMount() {
         const { match: { params } } = this.props;
         if (params.id !== '0') {
-            this.getCurso(params.id);
-            this.setState(
-                {
-                    formTitle : 'Editando Curso',
-                    formButton : 'Guardar Cambios'
+                this.getCurso(params.id);
+                this.setState(prevState => {
+                    prevState.formTitle = 'Editando Curso';
+                    prevState.formButton = 'Guardar Cambios';
+                    document.title = window.$title + prevState.formTitle;
                 }
             );
         }
+
+        document.title = window.$title + this.state.formTitle;
     }
 
     getCurso = (id) => {
@@ -218,129 +220,3 @@ class CursoDetalle extends React.Component {
 }
 
 export default CursoDetalle;
-
-
-
-
-/*
-
-<div class="bg-white p-4 shadow rounded">
-
-<form #saveForm="ngForm" (ngSubmit)="onSubmit()">
-
-  <span class="display-6 formTitle">{{formTitle}}</span>
-
-  <hr>
-  <h5>(*) Campos obligatorios</h5><br />
-  <div class="form-group">
-    <input class="form-control bg-light shadow-sm" type="text" placeholder="* Código del curso..." id="codigo"
-      name="codigo" required pattern="^[A-Z]{2}[0-9]{4}$" maxlength="6" [(ngModel)]="curso.codigo" #codigo="ngModel">
-    <div *ngIf="codigo.valid || codigo.pristine;then space else codigoErr"></div>
-    <ng-template #codigoErr>
-      <div *ngIf="codigo.errors?.required" class="alert alert-danger p-0 mb-1">
-        El curso necesita un código.
-      </div>
-      <div *ngIf="codigo.errors?.pattern" class="alert alert-danger p-0 mb-1">
-        El código ingresado no coincide con el patrón "AA####".
-      </div>
-    </ng-template>
-  </div>
-
-
-  <div class="form-group">
-    <input class="form-control bg-light shadow-sm" type="text" placeholder="* Nombre del curso..." id="nombre"
-      name="nombre" required maxlength="100" [(ngModel)]="curso.nombre" #nombre="ngModel">
-    <div *ngIf="nombre.valid || nombre.pristine;then space else nombreErr"></div>
-    <ng-template #nombreErr>
-      <div *ngIf="nombre.errors?.required" class="alert alert-danger p-0 mb-1">
-        El curso necesita un nombre.
-      </div>
-      <div *ngIf="nombre.errors?.maxlength" class="alert alert-danger p-0 mb-1">
-        Nombre demasiado largo.
-      </div>
-    </ng-template>
-
-  </div>
-
-
-  <div class="form-group">
-    <input class="form-control bg-light shadow-sm" type="number" placeholder="* Cantidad de créditos..." id="creditos"
-      name="creditos" required pattern="^[0-9]{1,4}$" min="1" [(ngModel)]="curso.creditos" #creditos="ngModel">
-    <div *ngIf="creditos.valid || creditos.pristine;then space else creditosErr"></div>
-    <ng-template #creditosErr>
-      <div *ngIf="creditos.errors?.required" class="alert alert-danger p-0 mb-1">
-        Se necesita asignarle créditos al curso.
-      </div>
-      <div *ngIf="creditos.errors?.pattern" class="alert alert-danger p-0 mb-1">
-        Ingresar un numero entero positivo menor de 4 dígitos.
-      </div>
-      <div *ngIf="creditos.errors?.min" class="alert alert-danger p-0 mb-1">
-        Debe ser mayor que cero.
-      </div>
-    </ng-template>
-  </div>
-
-
-  <div class="form-group">
-    <input class="form-control bg-light shadow-sm" type="number" placeholder="* Horas de teoría..." id="horas_teoria"
-      name="horas_teoria" required pattern="^[0-9]{1,4}$" min="1" [(ngModel)]="curso.horasTeoria"
-      #horas_teoria="ngModel">
-    <div *ngIf="horas_teoria.valid || horas_teoria.pristine;then space else horas_teoriaErr"></div>
-    <ng-template #horas_teoriaErr>
-      <div *ngIf="horas_teoria.errors?.required" class="alert alert-danger p-0 mb-1">
-        Se necesita asignarle horas de teoría al curso.
-      </div>
-      <div *ngIf="horas_teoria.errors?.pattern" class="alert alert-danger p-0 mb-1">
-        Ingresar un numero entero positivo menor de 4 dígitos.
-      </div>
-      <div *ngIf="horas_teoria.errors?.min" class="alert alert-danger p-0 mb-1">
-        Debe ser mayor que cero.
-      </div>
-    </ng-template>
-  </div>
-
-
-
-  <div class="form-group">
-    <input class="form-control bg-light shadow-sm" type="number" placeholder="* Horas de práctica..."
-      id="horas_practica" name="horas_practica" required pattern="^[0-9]{1,4}$" min="0"
-      [(ngModel)]="curso.horasPractica" #horas_practica="ngModel">
-    <div *ngIf="horas_practica.valid || horas_practica.pristine;then space else horas_practicaErr"></div>
-    <ng-template #horas_practicaErr>
-      <div *ngIf="horas_practica.errors?.required" class="alert alert-danger p-0 mb-1">
-        Se necesita asignarle horas de práctica al curso. (colocar cero si no tiene).
-      </div>
-      <div *ngIf="horas_practica.errors?.pattern" class="alert alert-danger p-0 mb-1">
-        Ingresar un numero entero positivo menor de 4 dígitos.
-      </div>
-      <div *ngIf="horas_practica.errors?.min" class="alert alert-danger p-0 mb-1">
-        Debe ser mayor o igual que cero.
-      </div>
-    </ng-template>
-  </div>
-
-
-
-  <div class="form-group">
-    <textarea class="form-control bg-light shadow-sm" placeholder="* Escriba una sumilla..." name="sumilla"
-      id="sumilla" rows="10" required [(ngModel)]="curso.sumilla" #sumilla="ngModel"></textarea>
-    <div *ngIf="sumilla.valid || sumilla.pristine;then space else sumillaErr"></div>
-    <ng-template #sumillaErr>
-      <div *ngIf="sumilla.errors?.required" class="alert alert-danger p-0 mb-1">
-        El curso necesita una breve sumilla.
-      </div>
-    </ng-template>
-  </div>
-
-
-  <div class="d-grid gap-2">
-    <button class="btn btn-primary" type="submit" [disabled]="saveForm.invalid">{{formButton}}</button>
-    <a class="btn btn-outline-primary" routerLink="/">Cancelar</a>
-  </div>
-</form>
-
-<ng-template #space>
-  <br />
-</ng-template>
-
-</div> */

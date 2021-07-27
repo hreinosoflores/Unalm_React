@@ -20,6 +20,7 @@ class CursoLista extends React.Component {
 
     componentDidMount() {
         this.getCursos();
+        document.title = window.$title + 'Nuestros Cursos';
     }
 
     render() {
@@ -57,17 +58,3 @@ class CursoLista extends React.Component {
 }
 
 export default CursoLista;
-
-
-/* <li className="bg-white list-group-item border-0 mb-3 shadow-sm rounded"
-    *ngFor="let curso of cursos | paginate:{itemsPerPage:4,currentPage: pagina}">
-    <a className="text-secondary text-decoration-none d-grid" [routerLink]="['./detail']" [queryParams]="{id: curso.id}">
-    <strong className="cursoTitle">
-        {{curso.codigo + ' | ' + curso.nombre}}
-    </strong>
-    <small>
-        Última modificación:
-        {{curso.updatedAt | date:formatoFecha}}
-    </small>
-    </a>
-</li> */

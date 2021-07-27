@@ -15,6 +15,10 @@ class Contacto extends React.Component {
         };
     }
 
+    componentDidMount(){
+        document.title = window.$title + 'Contáctenos';
+    }
+
     submit = (e) => {
         //Previene que se vuelva a recargar la pagina, comportamiento default del submit
         e.preventDefault();

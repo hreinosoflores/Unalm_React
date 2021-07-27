@@ -6,6 +6,7 @@ import App from './components/App';
 window.$apiURL = 'http://192.168.1.5:45455/';
 window.$urlCursos = 'api/Cursos/';
 window.$urlBandeja = 'api/BandejaMensajes/';
+window.$title = 'UNALM | ';
 
 
 ReactDOM.render(

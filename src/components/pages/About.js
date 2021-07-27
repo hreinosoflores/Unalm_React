@@ -7,6 +7,10 @@ class About extends React.Component {
         this.state = {};
     }
 
+    componentDidMount(){
+        document.title = window.$title + '¿Quiénes somos?';
+    }
+
     render() {
         return (
             <div className="p-4 shadow rounded">
