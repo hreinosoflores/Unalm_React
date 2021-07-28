@@ -18,7 +18,7 @@ class Cabecera extends React.Component {
                 <Navbar bg="white" expand="lg" fixed="top">
                     <Container>
                         <Navbar.Brand className="text-secondary text-break" id="titulo">
-                            <img src="img/unalm-logo.png" alt="logo" />{' '}
+                            <img src="/img/unalm-logo.png" alt="logo" />{' '}
                             Universidad Nacional Agraria La Molina</Navbar.Brand>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         <Navbar.Collapse id="basic-navbar-nav">

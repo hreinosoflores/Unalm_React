@@ -34,8 +34,6 @@ class CursoLista extends React.Component {
         document.title = window.$title + 'Nuestros Cursos';
     }
 
-
-
     render() {
 
         const { currentPage, cursosPerPage, cursos } = this.state;
@@ -62,7 +60,6 @@ class CursoLista extends React.Component {
                 this.setState(prevState => ({ currentPage: prevState.currentPage + 1 }));
             }
         }
-
 
 
         let lista = <li className="bg-white list-group-item border-0 mb-3 shadow-sm rounded">
@@ -96,6 +93,7 @@ class CursoLista extends React.Component {
             );
             lista = [items, paginacion];
         }
+
 
         return (
             <>

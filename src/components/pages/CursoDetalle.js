@@ -27,20 +27,29 @@ class CursoDetalle extends React.Component {
     }
 
     eliminar = () => {
-        fetch(window.$apiURL + window.$urlCursos  + this.state.curso.id,
-            {
-                method: 'DELETE',
-            }
-        )
-            .then(
-                response => {
-                    if (response.ok) {
-                        return response.text()
-                    } else {
-                        throw new Error("Error en la llamada Ajax")
-                    }
+        var aceptado = window.confirm('¿Desea eliminar este curso?');
+        if (aceptado) {
+            fetch(window.$apiURL + window.$urlCursos + this.state.curso.id,
+                {
+                    method: 'DELETE',
                 }
-            );
+            )
+                .then(
+                    response => {
+                        if (response.ok) {
+                            return response.text()
+                        } else {
+                            throw new Error("Error en la llamada Ajax")
+                        }
+                    }
+                )
+                .then(
+                    () => {
+                        alert('El curso fue eliminado con éxito.');
+                        this.props.history.push("/");
+                    }
+                );
+        }
     }
 
 

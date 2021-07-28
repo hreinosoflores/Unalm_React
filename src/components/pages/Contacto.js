@@ -2,34 +2,34 @@ import React from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Mensaje from '../../model/Mensaje';
-import { Link }  from 'react-router-dom';
-
-
+import { Link } from 'react-router-dom';
 
 class Contacto extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            mensaje: {}
+            mensaje: {},
+            errors: {},
+            validado: false
         };
     }
 
-    componentDidMount(){
+    componentDidMount() {
         document.title = window.$title + 'Contáctenos';
     }
 
-    submit = (e) => {
-        //Previene que se vuelva a recargar la pagina, comportamiento default del submit
-        e.preventDefault();
 
+
+    sendMensaje = () => {
+        const { nombres, apellidos, email, telefono, comentarios } = this.state.mensaje;
         let mensaje = new Mensaje(
             undefined,
-            this.state.mensaje.nombres,
-            this.state.mensaje.apellidos,
-            this.state.mensaje.email,
-            this.state.mensaje.telefono,
-            this.state.mensaje.comentarios,
+            nombres,
+            apellidos,
+            email,
+            telefono,
+            comentarios,
             new Date(),
             new Date()
         );
@@ -52,49 +52,60 @@ class Contacto extends React.Component {
             )
             .then(
                 data => {
-                    console.log(data);
+                    console.log('Mensaje -> ', data);
+                    alert('Se enviaron los comentarios.');
                     this.props.history.push("/");
-                } 
+                }
             );
+
     }
 
 
-    setNombres = (e) => {
+
+
+    submit = (e) => {
+        //Previene que se vuelva a recargar la pagina, comportamiento default del submit
+        e.preventDefault();
+        const form = e.currentTarget;
+        if (form.checkValidity() === false) {
+
+            e.stopPropagation();
+
+            if (form.nombres.value === '') {
+                this.setErrors('nombres', 'Nombre obligatorio');
+            } else if (form.nombres.value.length > 255) {
+                this.setErrors('nombres', 'Nombre demasiado largo');
+            }
+
+            if (form.apellidos.value === '') {
+                this.setErrors('apellidos', 'Apellido obligatorio');
+            } else if (form.nombres.value.length > 255) {
+                this.setErrors('apellidos', 'Apellido demasiado largo');
+            }
+
+            if (form.comentarios.value === '') {
+                this.setErrors('comentarios', 'Insertar Comentario');
+            }
+
+        } else {
+            this.sendMensaje();
+        }
+        this.setState({ validado: true });
+    }
+
+
+    setField = (field, value) => {
         this.setState(prevState => (
             {
-                mensaje: { ...prevState.mensaje, nombres: e.target.value }
+                mensaje: { ...prevState.mensaje, [field]: value }
             }
         ));
     }
 
-    setApellidos = (e) => {
+    setErrors = (field, value) => {
         this.setState(prevState => (
             {
-                mensaje: { ...prevState.mensaje, apellidos: e.target.value }
-            }
-        ));
-    }
-
-    setEmail = (e) => {
-        this.setState(prevState => (
-            {
-                mensaje: { ...prevState.mensaje, email: e.target.value }
-            }
-        ));
-    }
-
-    setTelefono = (e) => {
-        this.setState(prevState => (
-            {
-                mensaje: { ...prevState.mensaje, telefono: e.target.value }
-            }
-        ));
-    }
-
-    setComentarios = (e) => {
-        this.setState(prevState => (
-            {
-                mensaje: { ...prevState.mensaje, comentarios: e.target.value }
+                errors: { ...prevState.errors, [field]: value }
             }
         ));
     }
@@ -102,28 +113,68 @@ class Contacto extends React.Component {
     render() {
         return (
             <div className="bg-white p-4 shadow rounded">
-                <Form onSubmit={this.submit}>
+                <Form noValidate validated={this.state.validado} onSubmit={this.submit} id="contactForm">
                     <span className="display-6 rojo">Escríbanos para mayor información</span>
                     <hr />
                     <h5>(*) Campos obligatorios</h5><br />
                     <Form.Group className="mb-3" controlId="nombres">
-                        <Form.Control type="text" placeholder="* Nombres..." className="shadow-sm" name="nombres" onChange={this.setNombres} />
+                        <Form.Control
+                            type="text"
+                            placeholder="* Nombres..."
+                            className="shadow-sm"
+                            name="nombres"
+                            onChange={e => this.setField('nombres', e.target.value)}
+                            required
+                            maxLength="255"
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            {this.state.errors.nombres}
+                        </Form.Control.Feedback>
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="apellidos">
-                        <Form.Control type="text" placeholder="* Apellidos..." className="shadow-sm" name="apellidos" onChange={this.setApellidos} />
+                        <Form.Control
+                            type="text"
+                            placeholder="* Apellidos..."
+                            className="shadow-sm"
+                            name="apellidos"
+                            onChange={e => this.setField('apellidos', e.target.value)}
+                            required
+                            maxLength="255" />
+                        <Form.Control.Feedback type="invalid">
+                            {this.state.errors.apellidos}
+                        </Form.Control.Feedback>
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="email">
-                        <Form.Control type="text" placeholder="E-mail.." className="shadow-sm" name="email" onChange={this.setEmail} />
+                        <Form.Control
+                            type="text"
+                            placeholder="E-mail.."
+                            className="shadow-sm"
+                            name="email"
+                            onChange={e => this.setField('email', e.target.value)} />
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="telefono">
-                        <Form.Control type="text" placeholder="Teléfono..." className="shadow-sm" name="telefono" onChange={this.setTelefono} />
+                        <Form.Control
+                            type="text"
+                            placeholder="Teléfono..."
+                            className="shadow-sm"
+                            name="telefono"
+                            onChange={e => this.setField('telefono', e.target.value)} />
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="comentarios">
-                        <Form.Control as="textarea" rows={10} placeholder="* Comentarios..." name="comentarios" onChange={this.setComentarios} />
+                        <Form.Control
+                            as="textarea"
+                            rows={10}
+                            placeholder="* Comentarios..."
+                            name="comentarios"
+                            onChange={e => this.setField('comentarios', e.target.value)}
+                            required />
+                        <Form.Control.Feedback type="invalid">
+                            {this.state.errors.comentarios}
+                        </Form.Control.Feedback>
                     </Form.Group>
 
                     <div className="d-grid gap-2">
@@ -131,7 +182,7 @@ class Contacto extends React.Component {
                             Enviar Comentarios
                         </Button>
                         <Link to="/" >
-                            <Button className="w-100" variant="outline-primary" type="submit">
+                            <Button className="w-100" variant="outline-primary" type="submit" >
                                 Cancelar
                             </Button>
                         </Link>

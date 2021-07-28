@@ -1,6 +1,6 @@
 import '../scss/App.scss';
 import React from 'react';
-import { BrowserRouter, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 import Cabecera from './shared/Cabecera';
 import PiePagina from './shared/PiePagina';
 import CursoLista from './pages/CursoLista';
@@ -23,12 +23,19 @@ class App extends React.Component {
                 <div className="d-flex flex-column">
                     <Cabecera />
                     <main className="container-fluid col-lg-8 mx-auto">
-                        <Route path="/" exact={true} component={CursoLista} />
-                        <Route path="/curso/detalle/:id" exact={true} component={CursoDetalle} />
-                        <Route path="/curso/save/:id" exact={true} component={CursoSave} />
-                        <Route path="/about" exact={true} component={About} />
-                        <Route path="/contactenos" exact={true} component={Contacto} />
-                        <Route render={() => <Redirect to={{ pathname: "/" }} />} />
+                        <Switch>
+                            <Route path="/" exact component={CursoLista} />
+                            <Route path="/curso/detalle/:id" exact strict component={CursoDetalle} />
+                            <Route path="/curso/save/:id" exact strict component={CursoSave} />
+                            <Route path="/about" exact component={About} />
+                            <Route path="/contactenos" exact component={Contacto} />
+                            <Route path="*">
+                                <Redirect to="/" />
+                            </Route>
+                        </Switch>
+
+                        
+                        {/* <Route render={() => <Redirect to={{ pathname: "/" }} />} /> */}
                     </main>
                     <PiePagina />
                 </div>

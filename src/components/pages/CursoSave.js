@@ -11,19 +11,21 @@ class CursoDetalle extends React.Component {
         this.state = {
             curso: {},
             formTitle: 'Nuevo Curso',
-            formButton: 'Registrar'
+            formButton: 'Registrar',
+            errors: {},
+            validado: false
         };
     }
 
     componentDidMount() {
         const { match: { params } } = this.props;
         if (params.id !== '0') {
-                this.getCurso(params.id);
-                this.setState(prevState => {
-                    prevState.formTitle = 'Editando Curso';
-                    prevState.formButton = 'Guardar Cambios';
-                    document.title = window.$title + prevState.formTitle;
-                }
+            this.getCurso(params.id);
+            this.setState(prevState => {
+                prevState.formTitle = 'Editando Curso';
+                prevState.formButton = 'Guardar Cambios';
+                document.title = window.$title + prevState.formTitle;
+            }
             );
         }
 
@@ -68,7 +70,8 @@ class CursoDetalle extends React.Component {
             )
             .then(
                 data => {
-                    console.log(data);
+                    console.log('Curso -> ', data);
+                    alert('El curso fue registrado con éxito.');
                     this.props.history.push("/");
                 }
             );
@@ -106,7 +109,8 @@ class CursoDetalle extends React.Component {
             )
             .then(
                 data => {
-                    console.log(data);
+                    console.log('Curso -> ', data);
+                    alert('El curso fue modificado con éxito.');
                     this.props.history.push("/");
                 }
             );
@@ -116,13 +120,58 @@ class CursoDetalle extends React.Component {
 
     submit = (e) => {
         e.preventDefault();
-        const { match: { params } } = this.props;
-        if (params.id !== '0') {
-            this.updateCurso(params.id);
-        } else {
-            this.addCurso();
-        }
+        const form = e.currentTarget;
+        if (form.checkValidity() === false) {
 
+            e.stopPropagation();
+
+            if (form.codigo.value === '') {
+                this.setErrors('codigo', 'El curso necesita un código.');
+            } else {
+                this.setErrors('codigo', 'El código ingresado no coincide con el patrón "AA####".');
+            }
+
+            if (form.nombre.value === '') {
+                this.setErrors('nombre', 'El curso necesita un nombre.');
+            }
+
+            if (isNaN(parseInt(form.creditos.value))) {
+                this.setErrors('creditos', 'Ingresar un numero entero positivo menor de 4 dígitos.');
+            } else if (parseInt(form.creditos.value) < 0) {
+                this.setErrors('creditos', 'Debe ser mayor que cero.');
+            } else {
+                this.setErrors('creditos', 'Debe ser menor de 4 dígitos.');
+            }
+
+            if (isNaN(parseInt(form.horas_teoria.value))) {
+                this.setErrors('horas_teoria', 'Ingresar un numero entero positivo menor de 4 dígitos.');
+            } else if (parseInt(form.horas_teoria.value) < 0) {
+                this.setErrors('horas_teoria', 'Debe ser mayor que cero.');
+            } else {
+                this.setErrors('horas_teoria', 'Debe ser menor de 4 dígitos.');
+            }
+
+            if (isNaN(parseInt(form.horas_practica.value))) {
+                this.setErrors('horas_practica', 'Ingresar un numero entero positivo menor de 4 dígitos.');
+            } else if (parseInt(form.horas_practica.value) < 0) {
+                this.setErrors('horas_practica', 'Debe ser mayor o igual que cero.');
+            } else {
+                this.setErrors('horas_practica', 'Debe ser menor de 4 dígitos.');
+            }
+
+            if (form.sumilla.value === '') {
+                this.setErrors('sumilla', 'El curso necesita una breve sumilla.');
+            }
+
+        } else {
+            const { match: { params } } = this.props;
+            if (params.id !== '0') {
+                this.updateCurso(params.id);
+            } else {
+                this.addCurso();
+            }
+        }
+        this.setState({ validado: true });
     }
 
     setCodigo = (e) => {
@@ -173,37 +222,114 @@ class CursoDetalle extends React.Component {
         ));
     }
 
-
+    setErrors = (field, value) => {
+        this.setState(prevState => (
+            {
+                errors: { ...prevState.errors, [field]: value }
+            }
+        ));
+    }
 
     render() {
         return (
             <div className="bg-white p-4 shadow rounded">
 
-                <Form onSubmit={this.submit}>
+                <Form noValidate validated={this.state.validado} onSubmit={this.submit}>
                     <span className="display-6 rojo">{this.state.formTitle}</span>
                     <hr />
                     <h5>(*) Campos obligatorios</h5><br />
+
                     <Form.Group className="mb-3" controlId="codigo">
-                        <Form.Control type="text" placeholder="* Código del curso..." className="shadow-sm" name="codigo" onChange={this.setCodigo} defaultValue={this.state.curso.codigo} />
+                        <Form.Control
+                            type="text"
+                            placeholder="* Código del curso..."
+                            className="shadow-sm"
+                            name="codigo"
+                            onChange={this.setCodigo}
+                            defaultValue={this.state.curso.codigo}
+                            required
+                            pattern="^[A-Z]{2}[0-9]{4}$"
+                            maxLength="6" />
+                        <Form.Control.Feedback type="invalid">
+                            {this.state.errors.codigo}
+                        </Form.Control.Feedback>
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="nombre">
-                        <Form.Control type="text" placeholder="* Nombre del curso..." className="shadow-sm" name="nombre" onChange={this.setNombre} defaultValue={this.state.curso.nombre} />
+                        <Form.Control
+                            type="text"
+                            placeholder="* Nombre del curso..."
+                            className="shadow-sm"
+                            name="nombre"
+                            onChange={this.setNombre}
+                            defaultValue={this.state.curso.nombre}
+                            required
+                            maxLength="100" />
+                        <Form.Control.Feedback type="invalid">
+                            {this.state.errors.nombre}
+                        </Form.Control.Feedback>
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="creditos">
-                        <Form.Control type="number" placeholder="* Cantidad de créditos..." className="shadow-sm" name="creditos" onChange={this.setCreditos} defaultValue={this.state.curso.creditos} />
+                        <Form.Control
+                            type="number"
+                            placeholder="* Cantidad de créditos..."
+                            className="shadow-sm"
+                            name="creditos"
+                            onChange={this.setCreditos}
+                            defaultValue={this.state.curso.creditos}
+                            required
+                            min="1"
+                            max="9999" />
+                        <Form.Control.Feedback type="invalid">
+                            {this.state.errors.creditos}
+                        </Form.Control.Feedback>
                     </Form.Group>
+
                     <Form.Group className="mb-3" controlId="horas_teoria">
-                        <Form.Control type="number" placeholder="* Horas de teoría..." className="shadow-sm" name="horas_teoria" onChange={this.setHorasTeoria} defaultValue={this.state.curso.horasTeoria} />
+                        <Form.Control
+                            type="number"
+                            placeholder="* Horas de teoría..."
+                            className="shadow-sm"
+                            name="horas_teoria"
+                            onChange={this.setHorasTeoria}
+                            defaultValue={this.state.curso.horasTeoria}
+                            required
+                            min="1"
+                            max="9999" />
+                        <Form.Control.Feedback type="invalid">
+                            {this.state.errors.horas_teoria}
+                        </Form.Control.Feedback>
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="horas_practica">
-                        <Form.Control type="number" placeholder="* Horas de práctica..." className="shadow-sm" name="horas_practica" onChange={this.setHorasPractica} defaultValue={this.state.curso.horasPractica} />
+                        <Form.Control
+                            type="number"
+                            placeholder="* Horas de práctica..."
+                            className="shadow-sm"
+                            name="horas_practica"
+                            onChange={this.setHorasPractica}
+                            defaultValue={this.state.curso.horasPractica}
+                            required
+                            min="0"
+                            max="9999" />
+                        <Form.Control.Feedback type="invalid">
+                            {this.state.errors.horas_practica}
+                        </Form.Control.Feedback>
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="sumilla">
-                        <Form.Control as="textarea" rows={10} placeholder="* Escriba una sumilla..." name="sumilla" onChange={this.setSumilla} defaultValue={this.state.curso.sumilla} />
+                        <Form.Control
+                            as="textarea"
+                            rows={10}
+                            placeholder="* Escriba una sumilla..."
+                            name="sumilla"
+                            onChange={this.setSumilla}
+                            defaultValue={this.state.curso.sumilla}
+                            required />
+                        <Form.Control.Feedback type="invalid">
+                            {this.state.errors.sumilla}
+                        </Form.Control.Feedback>
                     </Form.Group>
 
                     <div className="d-grid gap-2">

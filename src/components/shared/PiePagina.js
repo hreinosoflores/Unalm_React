@@ -16,7 +16,7 @@ class PiePagina extends React.Component {
                 <span>
                     Universidad Nacional Agraria La Molina |
                     Todos los derechos reservados ® {this.state.date.getFullYear()} |
-                    Desarrollado en React Js v17  <img src="img/favicon.ico" width="32" alt="react" />
+                    Desarrollado en React Js v17  <img src="/img/favicon.ico" width="32" alt="react" />
                 </span>
             </footer>
         );
