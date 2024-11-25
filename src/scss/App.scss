@@ -6,17 +6,17 @@ $body-bg : #008f5d;
 //text color
 $body-color: #008f5d;
 
-//bootstrap primary color
-//$primary: #DF013A;
-
-//bootstrap secondary color
-//$secondary: #FA5882;
+//Pagination
+$pagination-bg: #f0f8ff;
+$pagination-hover-bg: #cce7ff;
+$pagination-active-bg: #007bff;
+$pagination-active-color: #fff;
 
 
 @import "../../node_modules/bootstrap/scss/bootstrap";
 
 * {
-    margin : 0;
+    margin: 0;
     padding: 0;
 }
 
