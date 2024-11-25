@@ -1,5 +1,6 @@
 import React from 'react';
 import Pagination from 'react-bootstrap/Pagination';
+import PropTypes from 'prop-types';
 
 
 export default function Paginacion({ totalPages, currentPage, paginate, nextPage, prevPage }) {
@@ -27,6 +28,11 @@ export default function Paginacion({ totalPages, currentPage, paginate, nextPage
 }
 
 
+Paginacion.propTypes = { totalPages: PropTypes.number.isRequired, };
+Paginacion.propTypes = { currentPage: PropTypes.number.isRequired, };
+Paginacion.propTypes = { paginate: PropTypes.number.isRequired, };
+Paginacion.propTypes = { nextPage: PropTypes.number.isRequired, };
+Paginacion.propTypes = { prevPage: PropTypes.number.isRequired, };
 
 
 
